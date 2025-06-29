@@ -5,8 +5,8 @@ export const Sidebar = ({selectedUser, setSelectedUser}) => {
     const navigate = useNavigate();
     return (
         <div
-            className={`bg-[#8185B2]/10 h-full rounded-r-xl overflow-y-scroll text-white ${
-                selectedUser ? "md:max-md:hidden" : ""
+            className={`bg-[#8185B2]/10 h-full  rounded-r-xl overflow-y-scroll text-white ${
+                selectedUser ? "max-md:hidden" : ""
             }`}
         >
             <div className="pb-5 p-3">
