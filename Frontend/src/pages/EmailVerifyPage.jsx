@@ -37,7 +37,7 @@ export const EmailVerifyPage = () => {
         }
     }, []);
 
-    // SET TIMER FOR THE OPT EXPIRE
+    // SET TIMER FOR THE OTP EXPIRE
     const [timeLeft, setTimeLeft] = useState(30);
     useEffect(() => {
         const timer = setInterval(() => {

@@ -44,16 +44,7 @@ export const LoginPage = () => {
 
                 {!isDataSubmitted && (
                     <>
-                        {/* FULL NAME */}
-                        <input
-                            type="text"
-                            name="fullName"
-                            placeholder="Full Name"
-                            value={formData.fullName}
-                            onChange={handleInputChange}
-                            className="focus:outline-none  p-2 border border-gray-500 rounded-md focus:ring-2 focus:ring-indigo-500"
-                            required
-                        ></input>
+                       
                         {/* EMAIL */}
                         <input
                             type="email"
@@ -105,9 +96,9 @@ export const LoginPage = () => {
                 <div>
                     <p className="text-gray-500 text-sm">Agree to the terms of use & privacy policy.</p>
                     <div className="flex gap-1 py-3 items-center">
-                        <p className="text-gray-500 text-sm">Create an account </p>
+                        <p className="text-gray-500 text-sm">Create  an account </p>
                         <button className="cursor-pointer text-violet-600">
-                            <span>Click here</span>
+                            <span onClick={()=>navigate("/signup")}>Click here</span>
                         </button>
                     </div>
                 </div>
