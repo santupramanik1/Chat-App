@@ -8,7 +8,7 @@ export const signupUser = TryCatch(async (req, res) => {});
 // URSER LOGIN
 export const loginUser = TryCatch(async (req, res) => {
     // Get the user email and password
-    const {email, passord} = req.body;
+    const {email} = req.body;
 
     const {status, otp, message} = await handleOtpRequest(email);
 
