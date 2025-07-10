@@ -69,6 +69,7 @@
     "is-glob": "^4.0.3",
     "is-number": "^7.0.0",
     "is-promise": "^4.0.0",
+    "jsonwebtoken": "^9.0.2",
     "kareem": "^2.6.3",
     "lodash": "^4.17.21",
     "math-intrinsics": "^1.1.0",
@@ -146,9 +147,9 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "start": "node dist/index.js",
-    "dev": "concurrently \"tsc --watch\" \"nodemon  dist/index.js\""
+      "build": "tsc",
+        "start": "node dist/index.js",
+        "dev": "concurrently \"tsc --watch\" \"nodemon  dist/index.js\""
   },
   "keywords": [],
   "author": "",
@@ -158,6 +159,7 @@
     "@types/amqplib": "^0.10.7",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.3",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/mongoose": "^5.11.96",
     "@types/redis": "^4.0.10"
   }

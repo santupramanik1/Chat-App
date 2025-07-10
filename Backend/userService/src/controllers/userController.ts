@@ -1,5 +1,8 @@
+import {generateToken} from "../config/generateToken.js";
 import {publishOtpToQueue} from "../config/rabbitmq.js";
+import {redisClient} from "../config/redis.js";
 import {TryCatch} from "../config/TryCatch.js";
+import {User} from "../model/userModel.js";
 import {handleOtpRequest} from "./otpController.js";
 
 // USER SIGNUP
@@ -7,6 +10,7 @@ export const signupUser = TryCatch(async (req, res) => {});
 
 // URSER LOGIN
 export const loginUser = TryCatch(async (req, res) => {
+  
     // Get the user email and password
     const {email} = req.body;
 
@@ -29,3 +33,49 @@ export const loginUser = TryCatch(async (req, res) => {
     await publishOtpToQueue("send-otp", emailPayload);
     res.status(200).json({success: true, message});
 });
+
+// VERIFY OTP
+export const verifyUser = TryCatch(async (req, res) => {
+    console.log("🚀 POST /api/v1/verify hit");
+    // Get the email and otp from the user
+    const {email, otp: enteredOtp} = req.body;
+
+    if (!email || !enteredOtp) {
+        res.status(400).json({success: false, message: "Email or Otp is required"});
+        return;
+    }
+
+    // Get the OTP from the redis
+    const otpKey = `otp:${email}`;
+    const storedOtp = await redisClient.get(otpKey);
+    if (!storedOtp || storedOtp !== enteredOtp) {
+        res.status(400).json({success: false, message: "Invalid or Expired otp"});
+        return;
+    }
+
+    // After Successfull otp entered we delete the otp from the redis
+    await redisClient.del(otpKey);
+
+    let user = await User.findOne({email});
+
+    // If the user is not find create a new account
+    if (!user) {
+        const name = email.slice(0, 8);
+        user = await User.create({name, email});
+    }
+
+    const token = generateToken(user);
+
+    res.json({
+        success: true,
+        message: "User verified",
+        user,
+        token,
+    });
+
+});
+
+export const signup=async(req:any,res:any) =>{
+    return res.json({message:"hey"})
+}
+

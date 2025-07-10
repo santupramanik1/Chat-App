@@ -23,6 +23,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use("/api/v1",userRoutes)
 
+console.log("hello")
+
 const PORT=process.env.PORT
 app.listen(PORT,()=>{
     console.log("Server is Listening at PORT ",PORT)

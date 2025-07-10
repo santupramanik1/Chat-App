@@ -56,6 +56,6 @@ export const consumeOtpFromQueue = async () => {
             }
         });
     } catch (error) {
-        console.log("Failed to Consume OTP From Rabbitmq", error);
+        console.log("Failed to Consume OTP From  Rabbitmq", error);
     }
 };
