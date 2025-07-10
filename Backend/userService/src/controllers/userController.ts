@@ -36,13 +36,13 @@ export const loginUser = TryCatch(async (req, res) => {
 
 // VERIFY OTP
 export const verifyUser = TryCatch(async (req, res) => {
-    console.log("🚀 POST /api/v1/verify hit");
+   
     // Get the email and otp from the user
     const {email, otp: enteredOtp} = req.body;
 
     if (!email || !enteredOtp) {
         res.status(400).json({success: false, message: "Email or Otp is required"});
-        return;
+        return
     }
 
     // Get the OTP from the redis
@@ -75,7 +75,4 @@ export const verifyUser = TryCatch(async (req, res) => {
 
 });
 
-export const signup=async(req:any,res:any) =>{
-    return res.json({message:"hey"})
-}
 
