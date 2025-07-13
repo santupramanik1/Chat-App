@@ -2,6 +2,7 @@ import {generateToken} from "../config/generateToken.js";
 import {publishOtpToQueue} from "../config/rabbitmq.js";
 import {redisClient} from "../config/redis.js";
 import {TryCatch} from "../config/TryCatch.js";
+import {AuthenticatedRequest} from "../middleware/isAuth.js";
 import {User} from "../model/userModel.js";
 import {handleOtpRequest} from "./otpController.js";
 
@@ -10,7 +11,6 @@ export const signupUser = TryCatch(async (req, res) => {});
 
 // URSER LOGIN
 export const loginUser = TryCatch(async (req, res) => {
-  
     // Get the user email and password
     const {email} = req.body;
 
@@ -36,13 +36,12 @@ export const loginUser = TryCatch(async (req, res) => {
 
 // VERIFY OTP
 export const verifyUser = TryCatch(async (req, res) => {
-   
     // Get the email and otp from the user
     const {email, otp: enteredOtp} = req.body;
 
     if (!email || !enteredOtp) {
         res.status(400).json({success: false, message: "Email or Otp is required"});
-        return
+        return;
     }
 
     // Get the OTP from the redis
@@ -72,7 +71,46 @@ export const verifyUser = TryCatch(async (req, res) => {
         user,
         token,
     });
-
 });
 
+// GET THE USER PROFILE
+export const myProfile = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const user = req.user;
 
+    res.json({
+        user,
+    });
+});
+
+// UPDATE USER-NAME
+export const updateUserName = TryCatch(async (req:AuthenticatedRequest, res) => {
+
+    // Find the user from the DB based on his userId
+    const user=await User.findById(req.user?._id)
+
+    // If the user not find simply return 404
+    if(!user)
+    {
+        res.status(404).json({
+            success:false,
+            message:"Please Login"
+        })
+        return
+    }
+
+    //Take the new username as an input from the user
+    user.name= req.body.name;
+
+    // Save the new username into the DB
+    await user.save()
+
+    // Update the username into the jwt token and generate a new token
+    const token=generateToken(user)
+
+    res.json({
+    message:"User profile updated successfully",
+    user,
+    token
+    })
+
+});

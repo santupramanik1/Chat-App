@@ -53,3 +53,12 @@ The verifyUser function handles OTP (One-Time Password) verification for user lo
 #### Generates JWT Token:
 
 - Calls generateToken(user) to create a signed token.
+
+## myProfile:
+- it  returns the profile of the currently logged-in user.
+
+### Parameter:
+- `req	:AuthenticatedRequest`	The request object extended to include the authenticated user.
+
+- `res	:Response`	The response object used to send the user profile as JSON.
+
