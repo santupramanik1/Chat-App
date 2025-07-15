@@ -1,20 +1,20 @@
-import {generateToken} from "../config/generateToken.js";
-import {publishOtpToQueue} from "../config/rabbitmq.js";
-import {redisClient} from "../config/redis.js";
-import {TryCatch} from "../config/TryCatch.js";
-import {AuthenticatedRequest} from "../middleware/isAuth.js";
-import {User} from "../model/userModel.js";
-import {handleOtpRequest} from "./otpController.js";
+import { generateToken } from "../config/generateToken.js";
+import { publishOtpToQueue } from "../config/rabbitmq.js";
+import { redisClient } from "../config/redis.js";
+import { TryCatch } from "../config/TryCatch.js";
+import { AuthenticatedRequest } from "../middleware/isAuth.js";
+import { User } from "../model/userModel.js";
+import { handleOtpRequest } from "./otpController.js";
 
 // USER SIGNUP
-export const signupUser = TryCatch(async (req, res) => {});
+export const signupUser = TryCatch(async (req, res) => { });
 
 // URSER LOGIN
 export const loginUser = TryCatch(async (req, res) => {
     // Get the user email and password
-    const {email} = req.body;
+    const { email } = req.body;
 
-    const {status, otp, message} = await handleOtpRequest(email);
+    const { status, otp, message } = await handleOtpRequest(email);
 
     if (status === 429) {
         res.status(429).json({
@@ -31,16 +31,16 @@ export const loginUser = TryCatch(async (req, res) => {
     };
 
     await publishOtpToQueue("send-otp", emailPayload);
-    res.status(200).json({success: true, message});
+    res.status(200).json({ success: true, message });
 });
 
 // VERIFY OTP
 export const verifyUser = TryCatch(async (req, res) => {
     // Get the email and otp from the user
-    const {email, otp: enteredOtp} = req.body;
+    const { email, otp: enteredOtp } = req.body;
 
     if (!email || !enteredOtp) {
-        res.status(400).json({success: false, message: "Email or Otp is required"});
+        res.status(400).json({ success: false, message: "Email or Otp is required" });
         return;
     }
 
@@ -48,19 +48,19 @@ export const verifyUser = TryCatch(async (req, res) => {
     const otpKey = `otp:${email}`;
     const storedOtp = await redisClient.get(otpKey);
     if (!storedOtp || storedOtp !== enteredOtp) {
-        res.status(400).json({success: false, message: "Invalid or Expired otp"});
+        res.status(400).json({ success: false, message: "Invalid or Expired otp" });
         return;
     }
 
     // After Successfull otp entered we delete the otp from the redis
     await redisClient.del(otpKey);
 
-    let user = await User.findOne({email});
+    let user = await User.findOne({ email });
 
     // If the user is not find create a new account
     if (!user) {
         const name = email.slice(0, 8);
-        user = await User.create({name, email});
+        user = await User.create({ name, email });
     }
 
     const token = generateToken(user);
@@ -83,34 +83,47 @@ export const myProfile = TryCatch(async (req: AuthenticatedRequest, res) => {
 });
 
 // UPDATE USER-NAME
-export const updateUserName = TryCatch(async (req:AuthenticatedRequest, res) => {
+export const updateUserName = TryCatch(async (req: AuthenticatedRequest, res) => {
 
     // Find the user from the DB based on his userId
-    const user=await User.findById(req.user?._id)
+    const user = await User.findById(req.user?._id)
 
     // If the user not find simply return 404
-    if(!user)
-    {
+    if (!user) {
         res.status(404).json({
-            success:false,
-            message:"Please Login"
+            success: false,
+            message: "Please Login"
         })
         return
     }
 
     //Take the new username as an input from the user
-    user.name= req.body.name;
+    user.name = req.body.name;
 
     // Save the new username into the DB
     await user.save()
 
     // Update the username into the jwt token and generate a new token
-    const token=generateToken(user)
+    const token = generateToken(user)
 
     res.json({
-    message:"User profile updated successfully",
-    user,
-    token
+        message: "User profile updated successfully",
+        user,
+        token
     })
 
 });
+
+// GET ALL THE USER
+export const getAllUser = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const users = await User.find()
+
+    res.json(users)
+})
+
+// GET A PARTICULAR USER BY ID
+export const getUser = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const user = await User.findById(req.params.id)
+
+    res.json(user)
+})

@@ -1,31 +1,32 @@
-import express from "express"
-import dotenv from "dotenv"
-dotenv.config()
-import { connectRedis } from "./config/redis.js"
-import { connectRabbitMQ } from "./config/rabbitmq.js"
-import { connectDB } from "./config/db.js"
-import userRoutes from "./routes/user.js"
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
+import {connectRedis} from "./config/redis.js";
+import {connectRabbitMQ} from "./config/rabbitmq.js";
+import {connectDB} from "./config/db.js";
+import userRoutes from "./routes/user.js";
 
-const app=express()
+const app = express();
 
 // CONNNECT TO MONGODB
-connectDB()
+connectDB();
 
 //CONNECT TO REDDIS
-connectRedis()
+connectRedis();
 
 //CONNECT TO RABBITMQ
-connectRabbitMQ()
-
+connectRabbitMQ();
 
 // MIDDLEWARE
-app.use(express.json())
-app.use(express.urlencoded({extended:true}))
-app.use("/api/v1",userRoutes)
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+app.use("/api/v1", userRoutes);
 
-console.log("hello")
+// FOR FRONTEND AND BACKEND CONNECTION
+app.use(cors());
 
-const PORT=process.env.PORT
-app.listen(PORT,()=>{
-    console.log("Server is Listening at PORT ",PORT)
-})
+const PORT = process.env.PORT;
+app.listen(PORT, () => {
+    console.log("Server is Listening at PORT ", PORT);
+});
