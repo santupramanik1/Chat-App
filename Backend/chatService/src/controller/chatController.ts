@@ -1,6 +1,8 @@
+import axios from "axios";
 import { TryCatch } from "../config/TryCatch.js";
 import { AuthenticatedRequest } from "../middlewares/isAuthenticated.js";
 import { Chat } from "../model/chatModel.js";
+import { Messages } from "../model/messageModel.js";
 
 export const createNewChat = TryCatch(async (req: AuthenticatedRequest, res) => {
     const userId = req.user?._id;
@@ -45,7 +47,45 @@ export const getAllChat = TryCatch(async (req: AuthenticatedRequest, res) => {
     }
 
     // Fetch all chats for the current user and sort them by most recently updated (latest activity first)
-    const chats = Chat.find({ user: userId }).sort({ updatedAt: -1 });
+    const chats = await Chat.find({ users: userId }).sort({ updatedAt: -1 });
 
-    
+    const chatsWithUserData = await Promise.all(
+        chats.map(async (chat) => {
+            const otherUserId = chat.users.find((id) => id !== userId);
+
+            // Count the unseen messages
+            const unseenCount = await Messages.countDocuments({
+                chatId: chat._id,  //To focus only on the specific chat
+                sender: { $ne: userId }, //So we don't count messages from yourself
+                seen: false  //To get only messages you haven't read
+            })
+
+            try {
+                const { data } = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`)
+                console.log("Enter")
+                return {
+                    user: data,
+                    chat: {
+                        ...chat.toObject(),
+                        latestMessage: chat.latestMessage || null,
+                        unseenCount
+                    }
+                }
+            } catch (error) {
+                console.log(error)
+                return {
+                    user: { _id: otherUserId, name: "Unknown user" },
+                    chat: {
+                        ...chat.toObject(),
+                        latestMessage: chat.latestMessage || null,
+                        unseenCount
+                    }
+                }
+            }
+        })
+    )
+
+    res.json({
+        chats: chatsWithUserData
+    })
 });
