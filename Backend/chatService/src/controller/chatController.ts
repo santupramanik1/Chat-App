@@ -62,7 +62,6 @@ export const getAllChat = TryCatch(async (req: AuthenticatedRequest, res) => {
 
             try {
                 const { data } = await axios.get(`${process.env.USER_SERVICE}/api/v1/user/${otherUserId}`)
-                console.log("Enter")
                 return {
                     user: data,
                     chat: {
@@ -89,3 +88,11 @@ export const getAllChat = TryCatch(async (req: AuthenticatedRequest, res) => {
         chats: chatsWithUserData
     })
 });
+
+
+// SEND MESSAGE
+export const sendMessages = TryCatch(async (req: AuthenticatedRequest, res) => {
+    const senderId = req.user?._id
+    const { chatId, text } = req.body
+    const imageFile = req.file
+})
