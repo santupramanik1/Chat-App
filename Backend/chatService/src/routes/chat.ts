@@ -10,7 +10,7 @@ router.post("/chat/new", isAuth, createNewChat)
 router.get("/chat/all", isAuth, getAllChat)
 
 // UPLOAD THE IMAGES IN CLOUDINARY
-router.post("/messages", isAuth, upload.single('image'), sendMessages)
+router.post("/message", isAuth, upload.single('image'), sendMessages)
 
 
 export default router
