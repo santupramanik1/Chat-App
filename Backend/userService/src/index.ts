@@ -9,6 +9,9 @@ import userRoutes from "./routes/user.js";
 
 const app = express();
 
+// FOR FRONTEND AND BACKEND CONNECTION
+app.use(cors());
+
 // CONNNECT TO MONGODB
 connectDB();
 
@@ -23,8 +26,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use("/api/v1", userRoutes);
 
-// FOR FRONTEND AND BACKEND CONNECTION
-app.use(cors());
+
 
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
