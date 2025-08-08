@@ -1,3 +1,5 @@
+## 🧾 Message Schema Fields
+
 | **Field Name**   | **Type**                         | **Required** | **Default** | **Description**                                                                |
 | ---------------- | -------------------------------- | ------------ | ----------- | ------------------------------------------------------------------------------ |
 | `chatId`         | `ObjectId` (Reference)           | ✅ Yes        | —           | References the related `Chat` document (foreign key).                          |

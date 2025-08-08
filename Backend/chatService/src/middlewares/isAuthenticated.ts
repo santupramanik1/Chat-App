@@ -32,7 +32,7 @@ export const isAuth = async (req: AuthenticatedRequest, res: Response, next: Nex
             });
         }
 
-        req.user = decodeValue.user
+        req.user = decodeValue.user as IUser
 
         next()
     } catch (error) {
