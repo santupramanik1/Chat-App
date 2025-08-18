@@ -20,8 +20,8 @@ export const LoginPage = () => {
         try {
             const { data } = await axios.post(`http://localhost:4000/api/v1/login`, { email })
 
-            alert(data.message)
-            // nevigateTo(`/verify?email=${email}`)
+            // alert(data.message)
+            nevigateTo(`/verify?email=${email}`)
 
         } catch (error: any) {
 
