@@ -1,39 +1,39 @@
-import { Loader2, MoveRight } from 'lucide-react'
+import {Loader2, MoveRight} from "lucide-react";
 
 import assets from "../assets/assets";
-import { useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import {useState} from "react";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
+import {useAppData, user_service} from "../context/AppContext";
 
 
 export const LoginPage = () => {
-
-    const [email, setEmail] = useState<string>("")
-    const [loading, setLoading] = useState<boolean>(false)
-
-    const nevigateTo = useNavigate()
-
+    // const {isAuth, loading: userLoading} = useAppData();
+    const [email, setEmail] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const nevigateTo = useNavigate();
     const handleFormSubmit = async (e: React.FormEvent<HTMLElement>): Promise<void> => {
-        e.preventDefault()
-        setLoading(true)
+        e.preventDefault();
+        setLoading(true);
 
         try {
-            const { data } = await axios.post(`http://localhost:4000/api/v1/login`, { email })
-
+            const {data} = await axios.post(`${user_service}/login`, {email});
             // alert(data.message)
-            nevigateTo(`/verify?email=${email}`)
-
+            nevigateTo(`/verify?email=${email}`);
         } catch (error: any) {
-
-            alert(error.response?.data?.message || "Something went wrong")
+            alert(error.response?.data?.message || "Something went wrong");
+        } finally {
+            setLoading(false);
         }
-        finally {
-            setLoading(false)
-        }
+        setEmail("");
+    };
 
-        setEmail("")
-    }
-
+    // if (userLoading) {
+    //     return <LoginPage></LoginPage>;
+    // }
+    // if (isAuth) {
+    //     nevigateTo("/chat");
+    // }
     return (
         <div className="min-h-screen flex items-center object-cover object-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
             {/* LEFT SIDE IMAGE */}
@@ -65,20 +65,22 @@ export const LoginPage = () => {
                     </div>
                 </>
 
-
                 {/* BUTTON */}
                 <button
                     type="submit"
                     disabled={loading}
                     className="py-3 font-medium bg-gradient-to-r from-purple-500 to-violet-600  text-white border-none cursor-pointer text-sm rounded-md flex items-center justify-center gap-2"
                 >
-                    {
-                        loading ?
-                            <div className='flex  gap-2'>
-                                <Loader2 className='w-5 h-5'></Loader2>
-                                Sending otp to your email
-                            </div> : <p className='flex  gap-2'>Send Verification Code <MoveRight /></p>
-                    }
+                    {loading ? (
+                        <div className="flex  gap-2">
+                            <Loader2 className="w-5 h-5"></Loader2>
+                            Sending otp to your email
+                        </div>
+                    ) : (
+                        <p className="flex  gap-2">
+                            Send Verification Code <MoveRight />
+                        </p>
+                    )}
                 </button>
 
                 <div>
@@ -86,5 +88,5 @@ export const LoginPage = () => {
                 </div>
             </form>
         </div>
-    )
-}
+    );
+};

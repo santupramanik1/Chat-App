@@ -1,6 +1,7 @@
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import  { LoginPage } from "./login/LoginPage";
-import { VerifyPage } from "./verify/VerifyPage";
+import {LoginPage} from "./login/LoginPage";
+import {VerifyPage} from "./verify/VerifyPage";
+import { ChatApp } from "./chat/ChatApp";
 
 const App = () => {
     const router = createBrowserRouter([
@@ -9,8 +10,16 @@ const App = () => {
             element: <LoginPage></LoginPage>,
         },
         {
-          path:"/verify",
-          element:<VerifyPage></VerifyPage>
+            path: "/login",
+            element: <LoginPage />,
+        },
+        {
+            path: "/verify",
+            element: <VerifyPage></VerifyPage>,
+        },
+        {
+            path:"/chat",
+            element:<ChatApp></ChatApp>
         }
     ]);
     return (
