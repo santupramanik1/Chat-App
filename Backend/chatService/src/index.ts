@@ -2,6 +2,7 @@ import  express  from "express";
 import { connectDB } from "./config/db.js";
 import chatRouter from "./routes/chat.js"
 import dotenv from "dotenv"
+import cors from "cors"
 const app=express()
 
 dotenv.config()
@@ -12,6 +13,7 @@ connectDB()
 // MIDDLEWARE
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+app.use(cors())
 
 // ROUTES
 app.use("/api/v1",chatRouter)
@@ -19,6 +21,7 @@ app.use("/api/v1",chatRouter)
 
 
 const PORT=process.env.PORT
+console.log()
 app.listen(PORT,()=>{
     console.log("Server is Listening at PORT :",PORT)
 })

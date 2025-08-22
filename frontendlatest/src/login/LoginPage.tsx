@@ -5,10 +5,13 @@ import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import {useAppData, user_service} from "../context/AppContext";
+import { Loading } from "../components/Loading";
+import toast from "react-hot-toast";
+
 
 
 export const LoginPage = () => {
-    // const {isAuth, loading: userLoading} = useAppData();
+    const {isAuth, loading: userLoading} = useAppData();
     const [email, setEmail] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const nevigateTo = useNavigate();
@@ -18,22 +21,22 @@ export const LoginPage = () => {
 
         try {
             const {data} = await axios.post(`${user_service}/login`, {email});
-            // alert(data.message)
+            toast.success(data.message)
             nevigateTo(`/verify?email=${email}`);
         } catch (error: any) {
-            alert(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
         } finally {
             setLoading(false);
         }
         setEmail("");
     };
 
-    // if (userLoading) {
-    //     return <LoginPage></LoginPage>;
-    // }
-    // if (isAuth) {
-    //     nevigateTo("/chat");
-    // }
+    if (userLoading) {
+        return (<Loading></Loading>);
+    }
+    if (isAuth) {
+        nevigateTo("/chat");
+    }
     return (
         <div className="min-h-screen flex items-center object-cover object-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl">
             {/* LEFT SIDE IMAGE */}

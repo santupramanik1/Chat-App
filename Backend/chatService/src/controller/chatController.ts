@@ -4,6 +4,7 @@ import {AuthenticatedRequest} from "../middlewares/isAuthenticated.js";
 import {Chat} from "../model/chatModel.js";
 import {Messages} from "../model/messageModel.js";
 
+// CREATE A NEW CHAT
 export const createNewChat = TryCatch(async (req: AuthenticatedRequest, res) => {
     const userId = req.user?._id;
 
