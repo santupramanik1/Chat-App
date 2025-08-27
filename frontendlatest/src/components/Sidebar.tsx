@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import type {User} from "../context/AppContext";
-import {CornerDownRight, CornerUpLeft, MessageCircle, Plus, Search, UserCircle, X} from "lucide-react";
+import {CornerDownRight, CornerUpLeft, LogOut, MessageCircle, Plus, Search, UserCircle, X} from "lucide-react";
+import {Link} from "react-router-dom";
 
 interface ChatsSidebarProps {
     sidebarOpen: boolean;
@@ -13,6 +14,7 @@ interface ChatsSidebarProps {
     selectedUser: string | null;
     setSelectedUser: (userId: string | null) => void;
     handleLogout: () => void | Promise<void>;
+    createChat: (user: User) => void;
 }
 export const Sidebar = ({
     sidebarOpen,
@@ -25,6 +27,7 @@ export const Sidebar = ({
     selectedUser,
     setSelectedUser,
     handleLogout,
+    createChat,
 }: ChatsSidebarProps) => {
     const [searchQuery, setSearchQuery] = useState("");
     console.log(chats);
@@ -67,7 +70,7 @@ export const Sidebar = ({
             </div>
 
             {/* Content */}
-            <div className="flex-1 border overflow-hidden px-4 py-2">
+            <div className="flex-1  overflow-hidden px-4 py-2">
                 {showAllUser ? (
                     <div className="space-y-4 h-full">
                         <div className="relative">
@@ -92,6 +95,7 @@ export const Sidebar = ({
                             .map((u) => (
                                 <button
                                     key={u._id}
+                                    onClick={() => createChat(u)}
                                     className="w-full text-left p-4 rounded-lg border border-gray-700 hover:border-gray-600 hover:bg-gray-800 transition-colors"
                                 >
                                     <div className="flex items-center gap-3 ">
@@ -178,8 +182,37 @@ export const Sidebar = ({
                         })}
                     </div>
                 ) : (
-                    <div className="flex flex-col h-full justify-center items-center text-center border"></div>
+                    <div className="flex flex-col h-full justify-center items-center text-center border">
+                        <div className="p-4 bg-gray-800 rounded-full mb-4">
+                            <MessageCircle className="w-8 h-8 text-gray-400"></MessageCircle>
+                        </div>
+                        <p className="text-gray-400 font-medium">No Conversation Yet</p>
+                        <p className="text-sm text-gray-500 mt-1">Start a new Chat to begin messaging</p>
+                    </div>
                 )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 space-y-2 border-t border-gray-700">
+                <Link
+                    to={"/profile"}
+                    className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
+                >
+                    <div className="p-1.5 bg-gray-700 rounded-lg">
+                        <UserCircle className="w-4 h-4 text-gray-300" />
+                    </div>
+                    <span className="font-medium text-gray-300">Profile</span>
+                </Link>
+
+                <button
+                    onClick={handleLogout}
+                    className="w-full cursor-pointer flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-red-500 hover:text-white"
+                >
+                    <div className="p-1.5 bg-red-600 rounded-lg">
+                        <LogOut className="w-4 h-4 text-gray-300" />
+                    </div>
+                    <span className="font-medium">Logout</span>
+                </button>
             </div>
         </aside>
     );

@@ -23,7 +23,7 @@ const App = () => {
         }
     ]);
     return (
-        <div className="bg-[url('./src/assets/bgImage.svg')] bg-cover bg-center w-full h-screen ">
+        <div className=" bg-[url('./src/assets/bgImage.svg')] bg-cover bg-center w-full h-screen ">
             <RouterProvider router={router}></RouterProvider>
         </div>
     );
