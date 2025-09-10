@@ -1,7 +1,8 @@
 import React, {useEffect, useMemo, useRef} from "react";
 import type {Message} from "../chat/ChatApp";
 import type {User} from "../context/AppContext";
-import {UserCircle} from "lucide-react";
+import {Check, CheckCheck, UserCircle} from "lucide-react";
+import moment from "moment";
 
 interface ChatMessagesProps {
     selectedUser: string | null;
@@ -45,13 +46,19 @@ export const ChatMessages = ({selectedUser, messages, loggedInUser}: ChatMessage
                             return (
                                 <div
                                     key={uniqueKey}
-                                    className={`flex flex-col gap-1 mt-2 ${isSentByMe ? "items-end" : "items-start"}`}
+                                    className={`flex flex-col gap-1 mt-2  ${isSentByMe ? "items-end" : "items-start"}`}
                                 >
-                                    <div className=" flex items-end gap-2 ">
-                                        <UserCircle className="" size={30}></UserCircle>
+                                    <div
+                                        className={`flex items-end gap-2  ${
+                                            isSentByMe ? "flex-row-reverse" : "flex-row"
+                                        } `}
+                                    >
+                                        <UserCircle className="text-white" size={30}></UserCircle>
                                         <div
                                             className={`rounded-lg p-3 max-w-sm mb-2 ${
-                                                isSentByMe ? "bg-blue-600 text-white" : "bg-gray-700 text-white rounded-bl-none"
+                                                isSentByMe
+                                                    ? "bg-blue-600 text-white"
+                                                    : "bg-gray-700 text-white rounded-bl-none"
                                             }`}
                                         >
                                             {e.messageType === "image" && e.image && (
@@ -66,10 +73,39 @@ export const ChatMessages = ({selectedUser, messages, loggedInUser}: ChatMessage
 
                                             {e.text && <p className="mt-1">{e.text}</p>}
                                         </div>
+
+                                        {/* Time + Seen */}
+                                        <div
+                                            className={`flex items-center gap-1 text-xs ${
+                                                isSentByMe
+                                                    ? "text-blue-400 pr-2 flex-row-reverse"
+                                                    : "text-gray-400 pl-2"
+                                            }`}
+                                        >
+                                            <span>{moment(e.createdAt).format("hh:mm .A .MMM D")}</span>
+
+                                            {isSentByMe && (
+                                                <div className="flex items-center ml-1 ">
+                                                    {e.seen ? (
+                                                        <div className="flex items-center gap-1 text-blue-400">
+                                                            <CheckCheck className="w-3 h-3"></CheckCheck>
+                                                            {e.seenAt && (
+                                                                <span className="">
+                                                                    {moment(e.seenAt).format("hh:mm A")}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    ) : (
+                                                        <Check className="w-3 h-3 text-gray-400"></Check>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                             );
                         })}
+                        <div ref={bottomRef}></div>
                     </>
                 )}
             </div>
