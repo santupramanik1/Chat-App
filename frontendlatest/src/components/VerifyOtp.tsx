@@ -84,7 +84,7 @@ export const VerifyOtp = () => {
         setLoading(true);
 
         try {
-            const {data} = await axios.post(`${user_service}/verify`, {email, otp: otpString});
+            const {data} = await axios.post(`${user_service}/api/v1/verify`, {email, otp: otpString});
             toast.success(data.message);
             Cookies.set("token", data.token, {
                 expires: 15,
@@ -112,7 +112,7 @@ export const VerifyOtp = () => {
         setResendLoading(true);
         setError("");
         try {
-            const {data} = await axios.post(`${user_service}/login`, {email});
+            const {data} = await axios.post(`${user_service}/api/v1/login`, {email});
             toast.success(data.message);
             setTimer(60);
         } catch (error: any) {

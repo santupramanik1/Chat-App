@@ -3,9 +3,9 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import toast, {Toaster} from "react-hot-toast";
 
-export const user_service = "http://localhost:4000/api/v1";
-export const mail_service = "http://localhost:4001/api/v1";
-export const chat_service = "http://localhost:4002/api/v1";
+export const user_service = "http://localhost:4000";
+export const mail_service = "http://localhost:4001";
+export const chat_service = "http://localhost:4002";
 
 // For user interface
 export interface User {
@@ -62,7 +62,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     async function fetchUser() {
         const token = Cookies.get("token");
         try {
-            const {data} = await axios.get(`${user_service}/me`, {
+            const {data} = await axios.get(`${user_service}/api/v1/me`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -90,7 +90,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     async function fetchChats() {
         const token = Cookies.get("token");
         try {
-            const {data} = await axios.get(`${chat_service}/chat/all`, {
+            const {data} = await axios.get(`${chat_service}/api/v1/chat/all`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -107,7 +107,7 @@ export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     async function fetchUsers() {
         const token = Cookies.get("token");
         try {
-            const {data} = await axios.get(`${user_service}/user/all`, {
+            const {data} = await axios.get(`${user_service}/api/v1/user/all`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

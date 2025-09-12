@@ -3,11 +3,14 @@ import {createRoot} from "react-dom/client";
 import "./index.css";
 import App from "./App.tsx";
 import {AppProvider} from "./context/AppContext.tsx";
+import {SocketProvider} from "./context/SocketContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-    <AppProvider>
-        <StrictMode>
-            <App />
-        </StrictMode>
-    </AppProvider>
+    <StrictMode>
+        <AppProvider>
+            <SocketProvider>
+                <App />
+            </SocketProvider>
+        </AppProvider>
+    </StrictMode>
 );

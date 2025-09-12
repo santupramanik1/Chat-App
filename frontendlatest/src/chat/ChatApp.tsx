@@ -9,6 +9,7 @@ import axios from "axios";
 import {ChatHeader} from "../components/ChatHeader";
 import {ChatMessages} from "../components/ChatMessages";
 import {MessageInput} from "../components/MessageInput";
+import { SocketData } from "../context/SocketContext";
 
 // Message Interface
 export interface Message {
@@ -28,6 +29,9 @@ export interface Message {
 
 export const ChatApp = () => {
     const {isAuth, loading, logoutUser, user: loggedInUser, users, chats, fetchChats, setChats} = useAppData();
+
+    const {onlineUsers}=SocketData()
+    console.log(onlineUsers)
 
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [message, setMessage] = useState("");
@@ -52,7 +56,7 @@ export const ChatApp = () => {
     async function fetchChat() {
         try {
             const token = Cookies.get("token");
-            const {data} = await axios.get(`${chat_service}/messages/${selectedUser}`, {
+            const {data} = await axios.get(`${chat_service}/api/v1/messages/${selectedUser}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -70,7 +74,7 @@ export const ChatApp = () => {
         try {
             const token = Cookies.get("token");
             const {data} = await axios.post(
-                `${chat_service}/chat/new`,
+                `${chat_service}/api/v1/chat/new`,
                 {userId: loggedInUser, otherUserId: u},
                 {
                     headers: {
@@ -110,7 +114,7 @@ export const ChatApp = () => {
                 formData.append("image", imageFile);
             }
 
-            const {data} = await axios.post(`${chat_service}/message`, formData, {
+            const {data} = await axios.post(`${chat_service}/api/v1/message`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data",

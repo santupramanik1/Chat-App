@@ -151,7 +151,7 @@ export const Sidebar = ({
                                                 >
                                                     {chat.user.name}
                                                 </span>
-                                                {unseenCount == 0 && (
+                                                {unseenCount > 0 && (
                                                     <div className="bg-red-600 text-xs font-bold rounded-lg text-white flex items-center justify-center px-2 h-5.5 min-w-[22px]">
                                                         {unseenCount > 99 ? "99+" : unseenCount}
                                                     </div>

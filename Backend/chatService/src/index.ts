@@ -3,7 +3,8 @@ import { connectDB } from "./config/db.js";
 import chatRouter from "./routes/chat.js"
 import dotenv from "dotenv"
 import cors from "cors"
-const app=express()
+import { app ,server} from "./config/socket.js";
+
 
 dotenv.config()
 
@@ -22,6 +23,6 @@ app.use("/api/v1",chatRouter)
 
 const PORT=process.env.PORT
 console.log()
-app.listen(PORT,()=>{
+server.listen(PORT,()=>{
     console.log("Server is Listening at PORT :",PORT)
 })

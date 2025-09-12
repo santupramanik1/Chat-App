@@ -20,7 +20,7 @@ export const LoginPage = () => {
         setLoading(true);
 
         try {
-            const {data} = await axios.post(`${user_service}/login`, {email});
+            const {data} = await axios.post(`${user_service}/api/v1/login`, {email});
             toast.success(data.message)
             nevigateTo(`/verify?email=${email}`);
         } catch (error: any) {
