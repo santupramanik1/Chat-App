@@ -15,6 +15,7 @@ interface ChatsSidebarProps {
     setSelectedUser: (userId: string | null) => void;
     handleLogout: () => void | Promise<void>;
     createChat: (user: User) => void;
+    onlineUsers: string[];
 }
 export const Sidebar = ({
     sidebarOpen,
@@ -28,9 +29,10 @@ export const Sidebar = ({
     setSelectedUser,
     handleLogout,
     createChat,
+    onlineUsers,
 }: ChatsSidebarProps) => {
     const [searchQuery, setSearchQuery] = useState("");
-    console.log(chats);
+    // console.log(chats);
     return (
         <aside
             className={`fixed sm:static z-20 top-0 left-0 h-screen w-80 border-r border-gray-700 bg-gray-900 transform ${
@@ -101,12 +103,17 @@ export const Sidebar = ({
                                     <div className="flex items-center gap-3 ">
                                         <div className="relative">
                                             <UserCircle className="h-6 w-6 text-gray-300"></UserCircle>
+
+                                            {/* Online Symbol */}
+                                            {onlineUsers.includes(u._id) && (
+                                                <span className="absolute top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 animate-pulse border-2 border-white" />
+                                            )}
                                         </div>
-                                        {/* Online Symbol */}
                                         <div className="flex-1 min-w-0">
                                             <span className="font-medium text-white ">{u.name}</span>
                                             <div className="text-sm mt-0.5 text-gray-400">
                                                 {/* To show online /offline text */}
+                                                {onlineUsers.includes(u._id) ? "Online" : "Offline"}
                                             </div>
                                         </div>
                                     </div>
@@ -141,6 +148,9 @@ export const Sidebar = ({
                                                 <UserCircle className="w-7 h-7 text-gray-300"></UserCircle>
                                                 {/* Online user work here */}
                                             </div>
+                                            {onlineUsers.includes(chat.user._id) && (
+                                                <span className="absolute top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 animate-pulse border-2 border-white" />
+                                            )}
                                         </div>
                                         <div className="flex-1 min-w-0 ">
                                             <div className="flex items-center justify-between mb-1">

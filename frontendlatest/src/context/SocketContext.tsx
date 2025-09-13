@@ -1,4 +1,4 @@
-import {Children, createContext, useContext, useEffect, useState, type ReactNode} from "react";
+import {createContext, useContext, useEffect, useState, type ReactNode} from "react";
 import {io, type Socket} from "socket.io-client";
 import {chat_service, useAppData} from "./AppContext";
 
