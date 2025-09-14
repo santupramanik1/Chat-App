@@ -29,8 +29,8 @@ export interface Chat {
 
 export interface Chats {
     _id: string;
-    user: string;
-    chat: string;
+    user: User;
+    chat: Chat;
 }
 
 interface AppContextType {
