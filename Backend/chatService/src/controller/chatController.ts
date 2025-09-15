@@ -49,7 +49,7 @@ export const getAllChat = TryCatch(async (req: AuthenticatedRequest, res) => {
     }
 
     // Fetch all chats for the current user and sort them by most recently updated (latest activity first)
-    const chats = await Chat.find({users: userId}).sort({updatedAt: -1});
+    const chats = await Chat.find({users: userId}).sort({updateAt: -1});
 
     const chatsWithUserData = await Promise.all(
         chats.map(async (chat) => {
@@ -206,7 +206,7 @@ export const sendMessages = TryCatch(async (req: AuthenticatedRequest, res) => {
         io.to(senderSocketId).emit("messagesSeen", {
             chatId: chatId,
             seenBy: otherUserId,
-            messageIds: [savedMessages._id],
+            messagesIds: [savedMessages._id],
         });
     }
 

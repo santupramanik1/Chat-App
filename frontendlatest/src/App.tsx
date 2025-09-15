@@ -2,6 +2,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import {LoginPage} from "./login/LoginPage";
 import {VerifyPage} from "./verify/VerifyPage";
 import { ChatApp } from "./chat/ChatApp";
+import { ProfilePage } from "./profile/ProfilePage";
 
 const App = () => {
     const router = createBrowserRouter([
@@ -20,6 +21,10 @@ const App = () => {
         {
             path:"/chat",
             element:<ChatApp></ChatApp>
+        },
+        {
+            path:"/profile",
+            element:<ProfilePage></ProfilePage>
         }
     ]);
     return (
