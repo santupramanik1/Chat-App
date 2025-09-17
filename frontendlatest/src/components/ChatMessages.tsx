@@ -82,7 +82,7 @@ export const ChatMessages = ({selectedUser, messages, loggedInUser}: ChatMessage
                                                     : "text-gray-400 pl-2"
                                             }`}
                                         >
-                                            <span>{moment(e.createdAt).format("hh:mm .A .MMM D")}</span>
+                                            <span>{moment(e.createdAt).format("hh:mm A . MMM D")}</span>
 
                                             {isSentByMe && (
                                                 <div className="flex items-center ml-1 ">

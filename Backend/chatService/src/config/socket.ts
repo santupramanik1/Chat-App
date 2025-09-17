@@ -70,7 +70,7 @@ io.on("connection", (socket: Socket) => {
         }
     });
 
-    socket.on("error", (error) => {
+    socket.on("connect_error", (error) => {
         console.error("Socket error:", error);
     });
 });

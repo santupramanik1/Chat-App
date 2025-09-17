@@ -17,7 +17,7 @@ export interface User {
 // For chat interface
 export interface Chat {
     _id: string;
-    user: string;
+    users: string[];
     latestMessage: {
         text: string;
         sender: string;
@@ -55,8 +55,8 @@ interface AppProviderProps {
 
 export const AppProvider: React.FC<AppProviderProps> = ({children}) => {
     const [user, setUser] = useState<User | null>(null);
-    const [isAuth, setIsAuth] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [isAuth, setIsAuth] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     // Fetch the user
     async function fetchUser() {

@@ -1,5 +1,4 @@
 import {Menu, UserCircle} from "lucide-react";
-import React from "react";
 import type {User} from "../context/AppContext";
 
 interface ChatHeaderProps {

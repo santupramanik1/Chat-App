@@ -128,7 +128,8 @@ export const Sidebar = ({
                             const isSelected = selectedUser === chat.chat._id;
                             const isSentByMe = latestMessage?.sender === loggedInUser?._id;
                             const unseenCount = chat.chat.unseenCount || 0;
-
+                            
+                            if (!chat.user) return null;
                             return (
                                 <button
                                     key={chat.chat._id}

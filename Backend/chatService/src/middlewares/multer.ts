@@ -6,7 +6,7 @@ const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: "chat-images",
-        allowed_format: ["jpg", "jpeg", "png", "gif", "webp"],
+        allowed_formats: ["jpg", "jpeg", "png", "gif", "webp"],
         transformation: [
             { width: 800, height: 800, crop: "limit" },
             { quality: "auto" }

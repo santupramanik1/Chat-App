@@ -40,8 +40,7 @@ export const ChatApp = () => {
     const [user, setUser] = useState<User | null>(null);
     const [showAllUser, setShowAllUser] = useState(false);
     const [isTyping, setIsTyping] = useState(false);
-    const [typingTimeOut, setTypingTimeOut] = useState<number | null>(null);
-
+    const [typingTimeOut, setTypingTimeOut] = useState<ReturnType<typeof setTimeout> | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -130,7 +129,7 @@ export const ChatApp = () => {
             const token = Cookies.get("token");
             const {data} = await axios.post(
                 `${chat_service}/api/v1/chat/new`,
-                {userId: loggedInUser, otherUserId: u._id},
+                {userId: loggedInUser?._id, otherUserId: u._id},
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -201,10 +200,14 @@ export const ChatApp = () => {
             setMessage("");
             const displayText = imageFile ? "📷" : message;
 
-            moveChatToTop(selectedUser!, {
-                text: displayText,
-                sender: data.sender,
-            },false);
+            moveChatToTop(
+                selectedUser!,
+                {
+                    text: displayText,
+                    sender: data.sender,
+                },
+                false
+            );
         } catch (error: any) {
             toast.error(error.response.data.message);
         }
@@ -214,7 +217,7 @@ export const ChatApp = () => {
     const handleTyping = (value: string) => {
         setMessage(value);
 
-        if (selectedUser && !socket) {
+        if (!selectedUser || !socket) {
             return;
         }
 
@@ -247,9 +250,7 @@ export const ChatApp = () => {
             if (selectedUser === message.chatId) {
                 setMessages((prev) => {
                     const currentMessages = prev || [];
-                    const messageExist = currentMessages.some((msg) => {
-                        msg._id === message._id;
-                    });
+                    const messageExist = currentMessages.some((msg) => msg._id === message._id);
 
                     if (!messageExist) {
                         return [...currentMessages, message];
